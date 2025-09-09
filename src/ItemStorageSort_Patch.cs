@@ -47,11 +47,16 @@ namespace QM_ImprovedSort
             result = x.InventoryWidthSize.CompareTo(y.InventoryWidthSize) * -1;
             if (result != 0) return result;
 
-            //--Sort by "Prefix" such as common_ or civ_.
-            //This emulates how the game's default sort keeps faction items together.
-            //  Generally they have similar damage types.
-            result = CompareItemIdPrefix(x.Id, y.Id);
-            if (result != 0) return result;
+            //--Sort by "Prefix".  The id's generally have a prefix such as "army_" or "trucker_".
+            //  However, that is not always the case.  For example, watermelon does not have a prefix.
+            //  Since the game's default sort is by id, this is the closest we can get to grouping similar items.
+            //
+            //  The purpose of this is to group similar items together, and still allow sorting by cost, durability, etc.
+            if(Plugin.Config.GroupByManufacture)
+            {
+                result = GetPrefix(x.Id).CompareTo(GetPrefix(y.Id));
+                if (result != 0) return result;
+            }
 
             //--Cost sort
             //  They should all be PickupItems, but just in case.
@@ -111,36 +116,13 @@ namespace QM_ImprovedSort
         /// <summary>
         /// Used to remove the _custom suffix from the id to determine if two items are the same base item.
         /// </summary>
-        private static Regex CustomBaseRegEx = new Regex(@"_custom$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+        private static Regex CustomBaseRegEx = new Regex(@"_custom$", RegexOptions.IgnoreCase);
 
         /// <summary>
         /// Matches the item's "prefix" such as "army_" or "trucker_".  This is used to group the items.
         /// Technically text before the first _ may not actually be a prefix, but close enough.
         /// </summary>
-        private static Regex ItemPrefixRegEx = new Regex(@"^(.+?_).*$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
-
-        /// <summary>
-        /// Compares the "prefix" of the item id.  Ex:  trucker_ of trucker_marksman_1
-        /// </summary>
-        /// <param name="x"></param>
-        /// <param name="y"></param>
-        /// <returns></returns>
-        private static int CompareItemIdPrefix(string x, string y)
-        {
-
-            //The data has built in prefixes that loosely match the damage type since it is basically
-            // per faction.
-
-            //The by default, the game simply sorts by the Id, which would naturally sort the items by faction.
-
-            //If there is a prefix for either item, use it to compare.  
-
-
-            if (!GetPrefix(x, out string xPrefix)) return 0;
-            if (!GetPrefix(y, out string yPrefix)) return 0;
-
-            return xPrefix.CompareTo(yPrefix);
-        }
+        private static Regex ItemPrefixRegEx = new Regex(@"^(.+?_).*$", RegexOptions.IgnoreCase);
 
         /// <summary>
         /// Gets the prefix if available.  Ex:  "army_" from "army_marksman_1"
@@ -152,21 +134,12 @@ namespace QM_ImprovedSort
         /// <param name="id">The item's id</param>
         /// <param name="prefix">The prefix that was extracted.</param>
         /// <returns>True if text that is most likely a prefix was extracted.</returns>
-        private static bool GetPrefix(string id, out string prefix)
+        private static string GetPrefix(string id)
         {
             Match match = ItemPrefixRegEx.Match(id);
-
-            if (match.Success)
-            {
-                prefix = match.Groups[1].Value;
-                return true;
-            }
-            else
-            {
-                prefix = "";
-                return false;
-            }
+            return match.Success ? match.Groups[1].Value : ""; 
         }
+
 
         /// <summary>
         /// Compares the ids of two items, taking into account the modified item suffix.

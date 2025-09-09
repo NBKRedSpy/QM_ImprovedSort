@@ -1,12 +1,12 @@
 [h1]Quasimorph Improved Sort[/h1]
 
 
-This mod was previously known as "Cost Sort".
+This mod was previously called "Cost Sort".
+It improves the game's item sorting so that the best items appear first in your inventory. Items are still grouped by type (such as weapons, backpacks, augments, etc.), but within each group, sorting prioritizes the most valuable items. The sort order considers factors like item cost (highest first), durability, remaining uses, spoilage time, and more.
 
-This mod's sort orders items so that the best items are first based on cost, remaining durability, uses remaining, when it expires, and more.
-This allows the user to only need to look at the first item of a item type section to see which is most likely the best.
+By default, items are also grouped by manufacturer when relevant. For example, all energy weapons from the same manufacturer will be grouped together. You can disable this grouping if you prefer sorting primarily by price, making the most expensive items appear at the top regardless of manufacturer. See the Sort Order section below for full details.
 
-The [url=https://steamcommunity.com/sharedfiles/filedetails/?id=3481043805]Sort Excess Mod[/url] further extends this mod.  Check it out to avoid scrolling through pages of the same item.
+For even more advanced inventory management, check out the [url=https://steamcommunity.com/sharedfiles/filedetails/?id=3481043805]Sort Excess Mod[/url], which builds on this mod to help you avoid scrolling through pages of duplicate items.
 
 [h1]Sort Order[/h1]
 [table]
@@ -35,11 +35,11 @@ The [url=https://steamcommunity.com/sharedfiles/filedetails/?id=3481043805]Sort 
 [/td]
 [/tr]
 [tr]
-[td]Item Owner
+[td]Item Manufacturer
 [/td]
 [td]
 [/td]
-[td]The owner of the item.  Ex: SBN, Realware, etc.
+[td](This can be disabled) The manufacture of the item.  Ex: SBN, Realware, etc.
 [/td]
 [/tr]
 [tr]
@@ -108,11 +108,54 @@ The [url=https://steamcommunity.com/sharedfiles/filedetails/?id=3481043805]Sort 
 [/tr]
 [/table]
 
+[h1]Configuration[/h1]
+
+[h2]MCM[/h2]
+
+This mod supports the Mod Configuration Menu.  The options can be set in the game's "Mods" button on the main screen.
+Alternatively, the settings can be changed in the config file directly.
+
+[h2]Config File[/h2]
+
+The configuration file will be created on the first game run and can be found at [i]%AppData%\..\LocalLow\Magnum Scriptum Ltd\Quasimorph_ModConfigs\MiniMapMoveCamera\config.json[/i].
+[table]
+[tr]
+[td]Name
+[/td]
+[td]Default
+[/td]
+[td]Description
+[/td]
+[/tr]
+[tr]
+[td]GroupByManufacture
+[/td]
+[td]true
+[/td]
+[td]Disable this option to sort items by price, placing the most expensive items first. This is often useful because the most expensive item is usually the best. If enabled, items will be grouped by type, similar to the game's default sorting (e.g., energy weapons grouped together).
+[/td]
+[/tr]
+[/table]
+
 [h1]Buy Me a Coffee[/h1]
 
 If you enjoy my mods and want to buy me a coffee, check out my [url=https://ko-fi.com/nbkredspy71915]Ko-Fi[/url] page.
 Thanks!
 
+[h1]Credits[/h1]
+[list]
+[*]Special thanks to Crynano for his excellent Mod Configuration Menu.
+[/list]
+
 [h1]Source Code[/h1]
 
 Source code is available on GitHub https://github.com/NBKRedSpy/QM_ImprovedSort
+
+[h1]Change Log[/h1]
+
+[h2]1.2.0[/h2]
+[list]
+[*]Fixed sort being non deterministic.  (Pressing sort multiple times would still move items around).
+[*]Added the option to primarily sort by cost instead of manufacture grouping.
+[*]Added MCM
+[/list]
