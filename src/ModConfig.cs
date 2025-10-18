@@ -1,5 +1,5 @@
-﻿using QM_ImprovedSort.Utility.Mcm;
-using QM_ImprovedSort.Utility;
+﻿using ImprovedSort.Utility.Mcm;
+using ImprovedSort.Utility;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using System;
@@ -7,7 +7,7 @@ using System.IO;
 using UnityEngine;
 
 
-namespace QM_ImprovedSort;
+namespace ImprovedSort;
 
 public class ModConfig : PersistentConfig<ModConfig>, IMcmConfigTarget
 {

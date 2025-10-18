@@ -7,7 +7,7 @@ using System.IO;
 using System.Reflection;
 using System.Text.RegularExpressions;
 
-namespace QM_ImprovedSort.Utility.Mcm
+namespace ImprovedSort.Utility.Mcm
 {
 
 

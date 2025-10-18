@@ -1,16 +1,17 @@
 ﻿using HarmonyLib;
 using MGSC;
-using QM_ImprovedSort.Utility;
+using ImprovedSort.Utility;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ImprovedSort_Bootstrap;
 
-namespace QM_ImprovedSort
+namespace ImprovedSort
 {
-    public static class Plugin
+    public class Plugin : BootstrapMod
     {
 
         public static ConfigDirectories ConfigDirectories = new ConfigDirectories();
@@ -18,17 +19,14 @@ namespace QM_ImprovedSort
         public static Utility.Logger Logger = new();
         private static McmConfiguration McmConfiguration;
 
-
-        [Hook(ModHookType.AfterBootstrap)]
-        public static void Init(IModContext modContext)
+        public Plugin(HookEvents hookEvents, bool isBeta) : base(hookEvents, isBeta)
         {
             Config = ModConfig.LoadConfig(ConfigDirectories.ConfigPath, Logger);
-            
+
             McmConfiguration = new McmConfiguration(Config, Logger);
             McmConfiguration.TryConfigure();
 
-
-            new Harmony("nbk_redspy.QM_ImprovedSort").PatchAll();
+            new Harmony("nbk_redspy.ImprovedSort").PatchAll();
         }
     }
 }

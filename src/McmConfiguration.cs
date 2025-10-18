@@ -1,12 +1,12 @@
-﻿using QM_ImprovedSort.Utility;
-using QM_ImprovedSort.Utility.Mcm;
-using QM_ImprovedSort;
+﻿using ImprovedSort.Utility;
+using ImprovedSort.Utility.Mcm;
+using ImprovedSort;
 using ModConfigMenu;
 using ModConfigMenu.Objects;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace QM_ImprovedSort
+namespace ImprovedSort
 {
     internal class McmConfiguration : McmConfigurationBase
     {

@@ -8,7 +8,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace QM_ImprovedSort
+namespace ImprovedSort
 {
     /// <summary>
     /// Sorts the items using the custom logic.

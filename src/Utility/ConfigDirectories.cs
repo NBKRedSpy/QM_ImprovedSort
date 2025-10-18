@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-namespace QM_ImprovedSort.Utility
+namespace ImprovedSort.Utility
 {
     public class ConfigDirectories
     {

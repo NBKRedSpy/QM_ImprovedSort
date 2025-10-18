@@ -3,7 +3,7 @@ using System;
 using System.IO;
 using System.Security.AccessControl;
 
-namespace QM_ImprovedSort.Utility;
+namespace ImprovedSort.Utility;
 
 public abstract class  PersistentConfig<T> where T : PersistentConfig<T>, new()
 {
