@@ -5,6 +5,7 @@ using ModConfigMenu;
 using ModConfigMenu.Objects;
 using System.Collections.Generic;
 using UnityEngine;
+using ModConfigMenu.Contracts;
 
 namespace ImprovedSort
 {
@@ -15,7 +16,7 @@ namespace ImprovedSort
 
         public override void Configure()
         {
-            ModConfigMenuAPI.RegisterModConfig("Improved Sort", new List<ConfigValue>()
+            ModConfigMenuAPI.RegisterModConfig("Improved Sort", new List<IConfigValue>()
             {
                 CreateConfigProperty(nameof(ModConfig.GroupByManufacture),
                     "Disable this option to sort items by price, placing the most expensive items first. " +
