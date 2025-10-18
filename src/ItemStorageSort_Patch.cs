@@ -43,30 +43,45 @@ namespace ImprovedSort
 
             int result;
 
+
             //--Default game sort by slot size.
             result = x.InventoryWidthSize.CompareTo(y.InventoryWidthSize) * -1;
             if (result != 0) return result;
+
+
+            //Put chips at the top
+            result = CompareUnlockedData(x, y);
+            if (result != 0) return result;
+
 
             //--Sort by "Prefix".  The id's generally have a prefix such as "army_" or "trucker_".
             //  However, that is not always the case.  For example, watermelon does not have a prefix.
             //  Since the game's default sort is by id, this is the closest we can get to grouping similar items.
             //
             //  The purpose of this is to group similar items together, and still allow sorting by cost, durability, etc.
-            if(Plugin.Config.GroupByManufacture)
+            if (Plugin.Config.GroupByManufacture)
             {
                 result = GetPrefix(x.Id).CompareTo(GetPrefix(y.Id));
                 if (result != 0) return result;
             }
 
+
             //--Cost sort
             //  They should all be PickupItems, but just in case.
             PickupItem piX = x as PickupItem;
             PickupItem piY = y as PickupItem;
-
+            
             float xPrice = ((ItemRecord)(piX?._records?.FirstOrDefault()))?.Price ?? 0f;
             float yPrice = ((ItemRecord)(piY?._records?.FirstOrDefault()))?.Price ?? 0f;
             result = xPrice.CompareTo(yPrice) * -1;
             if (result != 0) return result;
+
+
+
+            //finish here:
+            //result = CompareUnlockedData(x, y);
+            //if (result != 0) return result;
+
 
             //--Modified versions first
             result = CompareIdsWithModified(x, y);
@@ -111,6 +126,50 @@ namespace ImprovedSort
             return 0;
 
 
+        }
+
+        /// <summary>
+        /// If either item is a data disk, compare their unlock status and order the locked items first.
+        /// In this case, locked means the player has not yet unlocked the data disk's content.
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <returns></returns>
+        private static int CompareUnlockedData(BasePickupItem x, BasePickupItem y)
+        {
+            // Extract DataDiskComponent from both items
+            var xDataDisk = x.Comp<DatadiskComponent>();
+            var yDataDisk = y.Comp<DatadiskComponent>();
+            
+            // If neither item has a DataDiskComponent, they are equal in this comparison
+            if (xDataDisk == null && yDataDisk == null)
+                return 0;
+            
+            // If only one has a DataDiskComponent, prioritize the one without (non-data-disk items first)
+            if (xDataDisk == null)
+                return -1;
+            if (yDataDisk == null)
+                return 1;
+            
+            // Extract DataDiskRecord from both items
+            var xRecord = x as PickupItem;
+            var yRecord = y as PickupItem;
+            
+            var xDataDiskRecord = xRecord?._records?.FirstOrDefault() as DatadiskRecord;
+            var yDataDiskRecord = yRecord?._records?.FirstOrDefault() as DatadiskRecord;
+
+            // Check unlock status using MGSC.ItemInteractionSystem.IsAlreadyUnlockedDatadisk
+
+            var mercenaries = Plugin.State.Get<Mercenaries>();
+            var magnumCargo = Plugin.State.Get<MagnumCargo>();  
+
+            bool xUnlocked = xDataDiskRecord != null && MGSC.ItemInteractionSystem.IsAlreadyUnlockedDatadisk(xDataDiskRecord, xDataDisk,
+                mercenaries, magnumCargo);
+            bool yUnlocked = yDataDiskRecord != null && MGSC.ItemInteractionSystem.IsAlreadyUnlockedDatadisk(yDataDiskRecord, yDataDisk,
+                mercenaries, magnumCargo);
+
+            // Compare unlock status - locked items first (false < true, so multiply by -1 to reverse)
+            return xUnlocked.CompareTo(yUnlocked); //Locked first.
         }
 
         /// <summary>

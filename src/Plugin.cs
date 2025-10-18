@@ -15,12 +15,17 @@ namespace ImprovedSort
     {
 
         public static ConfigDirectories ConfigDirectories = new ConfigDirectories();
+
+        public static State State { get; private set; }
         public static ModConfig Config { get; private set; }
         public static Utility.Logger Logger = new();
         private static McmConfiguration McmConfiguration;
 
         public Plugin(HookEvents hookEvents, bool isBeta) : base(hookEvents, isBeta)
         {
+
+            State = modContext.State;
+
             Config = ModConfig.LoadConfig(ConfigDirectories.ConfigPath, Logger);
 
             McmConfiguration = new McmConfiguration(Config, Logger);
