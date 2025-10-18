@@ -163,13 +163,55 @@ namespace ImprovedSort
             var mercenaries = Plugin.State.Get<Mercenaries>();
             var magnumCargo = Plugin.State.Get<MagnumCargo>();  
 
-            bool xUnlocked = xDataDiskRecord != null && MGSC.ItemInteractionSystem.IsAlreadyUnlockedDatadisk(xDataDiskRecord, xDataDisk,
+            bool xUnlocked = xDataDiskRecord != null && IsAlreadyUnlockedDatadiskLocal(xDataDiskRecord, xDataDisk,
                 mercenaries, magnumCargo);
-            bool yUnlocked = yDataDiskRecord != null && MGSC.ItemInteractionSystem.IsAlreadyUnlockedDatadisk(yDataDiskRecord, yDataDisk,
+            bool yUnlocked = yDataDiskRecord != null && IsAlreadyUnlockedDatadiskLocal(yDataDiskRecord, yDataDisk,
                 mercenaries, magnumCargo);
 
             // Compare unlock status - locked items first (false < true, so multiply by -1 to reverse)
             return xUnlocked.CompareTo(yUnlocked); //Locked first.
+        }
+
+
+        /// <summary>
+        /// This is a copy of the legacy check for locked chips.
+        /// </summary>
+        /// <param name="xDataDiskRecord"></param>
+        /// <param name="datadiskComponent"></param>
+        /// <param name="mercenaries"></param>
+        /// <param name="magnumCargo"></param>
+        /// <returns></returns>
+        private static bool IsAlreadyUnlockedDatadiskLocal(DatadiskRecord datadiskRecord, DatadiskComponent datadiskComponent, Mercenaries mercenaries, MagnumCargo magnumCargo)
+        {
+
+            //COPY WARNING: MGSC.ScreenWithShipCargo.DragControllerShowContextMenuCallback(MGSC.ItemSlot)
+            //  This is a copy of the code that is in the middle of the function.  Curerntly at line 425
+
+            //Keeping the variable names close to the original for ease of comparison.
+            bool flag3 = false;
+
+            if (datadiskComponent != null)
+            {
+                switch (datadiskRecord.UnlockType)
+                {
+                    case DatadiskUnlockType.Mercenary:
+                        flag3 = mercenaries.UnlockedMercenaries.IndexOf(datadiskComponent.UnlockId) != -1;
+                        break;
+                    case DatadiskUnlockType.MercenaryClass:
+                        flag3 = mercenaries.UnlockedClasses.IndexOf(datadiskComponent.UnlockId) != -1;
+                        break;
+                    case DatadiskUnlockType.ProductionItem:
+                        flag3 = magnumCargo.UnlockedProductionItems.IndexOf(datadiskComponent.UnlockId) != -1;
+                        //I think this is unrelated to the actual unlock check.
+                        //if (Data.Items.GetSimpleRecord<AugmentationRecord>(datadiskComponent.UnlockId) != null || Data.Items.GetSimpleRecord<ImplantRecord>(datadiskComponent.UnlockId) != null)
+                        //{
+                        //    flag4 = true;
+                        //}
+                        break;
+                }
+            }
+
+            return flag3;
         }
 
         /// <summary>
@@ -229,8 +271,10 @@ namespace ImprovedSort
             {
                 return x.Id.CompareTo(y.Id);
             }
-
-            
         }
+
+
+
+
     }
 }

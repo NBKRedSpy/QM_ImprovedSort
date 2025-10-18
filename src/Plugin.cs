@@ -24,9 +24,14 @@ namespace ImprovedSort
         public Plugin(HookEvents hookEvents, bool isBeta) : base(hookEvents, isBeta)
         {
 
-            State = modContext.State;
+            this.HookEvents.AfterConfigsLoaded += OnAfterConfigsLoaded;
+        }
 
+        private void OnAfterConfigsLoaded(IModContext context)
+        {
             Config = ModConfig.LoadConfig(ConfigDirectories.ConfigPath, Logger);
+
+            State = context.State;
 
             McmConfiguration = new McmConfiguration(Config, Logger);
             McmConfiguration.TryConfigure();
