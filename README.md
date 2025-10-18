@@ -17,6 +17,7 @@ For even more advanced inventory management, check out the [Sort Excess Mod](htt
 |Slots item takes||If the item takes one or two slots.
 |Item Manufacturer||(This can be disabled) The manufacture of the item.  Ex: SBN, Realware, etc.|
 |Cost (descending)|x|The listed price of the item.|
+|Chip lock status|x|Locked chips are first|
 |Is Modified|x|If the item is a modified version.  Indicated in game by the M icon.|
 |Item id||The internal identifier of an item.  Ex: rags.  This is identical to the game's existing sort.|
 |Stack Count|x|The number of items in the stack.  Descending.|
@@ -50,6 +51,9 @@ Thanks!
 Source code is available on GitHub https://github.com/NBKRedSpy/QM_ImprovedSort
 
 # Change Log
+
+## 1.3.0 
+* Multi Version Support for current release.
 
 ## 1.2.0 
 * Fixed sort being non deterministic.  (Pressing sort multiple times would still move items around).

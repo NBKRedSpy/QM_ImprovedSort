@@ -69,7 +69,7 @@
 	<ItemGroup>
 	  <ProjectReference Include="..\..\bootstrap\src\ImprovedSort_Bootstrap.csproj" />
 	</ItemGroup>
-	<!--<Target Name="SteamIdCheck" Condition="'$(SteamId)'==''" AfterTargets="PostBuildEvent">
+	<Target Name="SteamIdCheck" Condition="'$(SteamId)'==''" AfterTargets="PostBuildEvent">
 		<Message Importance="high" Text="Steam Id is not set in the bootstrap's SteamId.txt.  Aborting deployment." />
 	</Target>
 	<Target Name="SteamWorkshopDeploy" Condition="'$(SteamId)'!=''" AfterTargets="PostBuildEvent">
@@ -81,7 +81,7 @@
 			<FilesToDelete Include="$(VersionWorkshopPath)/*" />
 			<Delete Files="@(FilesToDelete)" />
 			<BuildSource Include="$(TargetDir)/*.*" Exclude="$(TargetDir)/*bootstrap.*" />
-			--><!-- Exclude workaround for build ignorning private assets for Project References--><!--
+			 <!--Exclude workaround for build ignorning private assets for Project References-->
 		</ItemGroup>
 
 		<Message Importance="high" Text="ProjectDir folder -&gt; $(ProjectDir)" />
@@ -89,5 +89,5 @@
 		<MakeDir Directories="$(VersionWorkshopPath)" ContinueOnError="true" />
 		<Copy SourceFiles="@(BuildSource)" DestinationFolder="$(VersionWorkshopPath)" />
 		<Delete Files="$(VersionWorkshopPath)/*bootstrap.dll" />
-	</Target>-->
+	</Target>
 </Project>

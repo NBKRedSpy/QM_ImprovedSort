@@ -48,12 +48,6 @@ namespace ImprovedSort
             result = x.InventoryWidthSize.CompareTo(y.InventoryWidthSize) * -1;
             if (result != 0) return result;
 
-
-            //Put chips at the top
-            result = CompareUnlockedData(x, y);
-            if (result != 0) return result;
-
-
             //--Sort by "Prefix".  The id's generally have a prefix such as "army_" or "trucker_".
             //  However, that is not always the case.  For example, watermelon does not have a prefix.
             //  Since the game's default sort is by id, this is the closest we can get to grouping similar items.
@@ -77,11 +71,9 @@ namespace ImprovedSort
             if (result != 0) return result;
 
 
-
-            //finish here:
-            //result = CompareUnlockedData(x, y);
-            //if (result != 0) return result;
-
+            //Putting chip compare below price since the rest of the compares do not apply to chips.
+            result = CompareUnlockedData(x, y);
+            if (result != 0) return result;
 
             //--Modified versions first
             result = CompareIdsWithModified(x, y);
