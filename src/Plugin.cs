@@ -14,6 +14,8 @@ namespace QM_ImprovedSort
     {
 
         public static ConfigDirectories ConfigDirectories = new ConfigDirectories();
+
+        public static State State { get; private set; }
         public static ModConfig Config { get; private set; }
         public static Utility.Logger Logger = new();
         private static McmConfiguration McmConfiguration;
@@ -22,6 +24,9 @@ namespace QM_ImprovedSort
         [Hook(ModHookType.AfterBootstrap)]
         public static void Init(IModContext modContext)
         {
+
+            State = modContext.State;
+
             Config = ModConfig.LoadConfig(ConfigDirectories.ConfigPath, Logger);
             
             McmConfiguration = new McmConfiguration(Config, Logger);
