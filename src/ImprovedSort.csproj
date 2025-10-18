@@ -21,9 +21,10 @@
 	<PropertyGroup>
 		<SteamIdFilePath>$(MSBuildProjectDirectory)/../../bootstrap/SteamId.txt</SteamIdFilePath>
 		<SteamId Condition="Exists('$(SteamIdFilePath)')">$([System.IO.File]::ReadAllText('$(SteamIdFilePath)'))</SteamId>
-		<Assembly-CSharpPath Condition="Exists('lib-stripped\Assembly-CSharp-publicized.dll')">lib-stripped/Assembly-CSharp-publicized.dll</Assembly-CSharpPath>
-		<Assembly-CSharpPath Condition="!Exists('lib-stripped\Assembly-CSharp-publicized.dll')">$(ManagedPath)Assembly-CSharp.dll</Assembly-CSharpPath>
 		<WorkshopPath>D:\Games\Steam\steamapps\workshop\content\2059170\$(SteamId)\</WorkshopPath>
+		<ManagedPath>$(GAME_PATH)\$(GAME_NAME)_Data\Managed\</ManagedPath>
+		<Assembly-CSharpPath Condition="Exists('./lib-stripped\Assembly-CSharp-publicized.dll')">./lib-stripped/Assembly-CSharp-publicized.dll</Assembly-CSharpPath>
+		<Assembly-CSharpPath Condition="!Exists('.\lib-stripped\Assembly-CSharp-publicized.dll')">$(ManagedPath)Assembly-CSharp.dll</Assembly-CSharpPath>
 		<MCM_PATH>$(GAME_PATH)\..\..\workshop\content\2059170\3469678797\MCM.dll</MCM_PATH>
 	</PropertyGroup>
 	<ItemGroup>
