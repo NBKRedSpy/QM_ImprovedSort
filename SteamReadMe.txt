@@ -51,6 +51,14 @@ For even more advanced inventory management, check out the [url=https://steamcom
 [/td]
 [/tr]
 [tr]
+[td]Chip lock status
+[/td]
+[td]x
+[/td]
+[td]Locked chips are first
+[/td]
+[/tr]
+[tr]
 [td]Is Modified
 [/td]
 [td]x
@@ -152,6 +160,16 @@ Thanks!
 Source code is available on GitHub https://github.com/NBKRedSpy/QM_ImprovedSort
 
 [h1]Change Log[/h1]
+
+[h2]1.4.0[/h2]
+[list]
+[*]Multi Version Support for beta release.
+[/list]
+
+[h2]1.3.0[/h2]
+[list]
+[*]Multi Version Support for current release.
+[/list]
 
 [h2]1.2.0[/h2]
 [list]
