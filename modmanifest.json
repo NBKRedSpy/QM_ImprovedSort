@@ -1,0 +1,9 @@
+{
+  "UniqueModName": "NBKRedSpy_ImprovedSort_Bootstrap",
+  "Assemblies": [
+    "ImprovedSort_Bootstrap.dll"
+  ],
+  "Dependencies": [],
+  "SteamTags": [
+  ]
+}
