@@ -1,12 +1,13 @@
-﻿using QM_ImprovedSort.Utility;
-using QM_ImprovedSort.Utility.Mcm;
-using QM_ImprovedSort;
+﻿using ImprovedSort.Utility;
+using ImprovedSort.Utility.Mcm;
+using ImprovedSort;
 using ModConfigMenu;
 using ModConfigMenu.Objects;
 using System.Collections.Generic;
 using UnityEngine;
+using ModConfigMenu.Contracts;
 
-namespace QM_ImprovedSort
+namespace ImprovedSort
 {
     internal class McmConfiguration : McmConfigurationBase
     {
@@ -15,7 +16,7 @@ namespace QM_ImprovedSort
 
         public override void Configure()
         {
-            ModConfigMenuAPI.RegisterModConfig("Improved Sort", new List<ConfigValue>()
+            ModConfigMenuAPI.RegisterModConfig("Improved Sort", new List<IConfigValue>()
             {
                 CreateConfigProperty(nameof(ModConfig.GroupByManufacture),
                     "Disable this option to sort items by price, placing the most expensive items first. " +

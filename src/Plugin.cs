@@ -1,34 +1,42 @@
 ﻿using HarmonyLib;
 using MGSC;
-using QM_ImprovedSort.Utility;
+using ImprovedSort.Utility;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ImprovedSort_Bootstrap;
 
-namespace QM_ImprovedSort
+namespace ImprovedSort
 {
-    public static class Plugin
+    public class Plugin : BootstrapMod
     {
 
         public static ConfigDirectories ConfigDirectories = new ConfigDirectories();
+
+        public static State State { get; private set; }
         public static ModConfig Config { get; private set; }
         public static Utility.Logger Logger = new();
         private static McmConfiguration McmConfiguration;
 
+        public Plugin(HookEvents hookEvents, bool isBeta) : base(hookEvents, isBeta)
+        {
 
-        [Hook(ModHookType.AfterBootstrap)]
-        public static void Init(IModContext modContext)
+            this.HookEvents.AfterConfigsLoaded += OnAfterConfigsLoaded;
+        }
+
+        private void OnAfterConfigsLoaded(IModContext context)
         {
             Config = ModConfig.LoadConfig(ConfigDirectories.ConfigPath, Logger);
-            
+
+            State = context.State;
+
             McmConfiguration = new McmConfiguration(Config, Logger);
             McmConfiguration.TryConfigure();
 
-
-            new Harmony("nbk_redspy.QM_ImprovedSort").PatchAll();
+            new Harmony("nbk_redspy.ImprovedSort").PatchAll();
         }
     }
 }

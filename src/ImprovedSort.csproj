@@ -8,7 +8,6 @@
 	</PropertyGroup>
 	<PropertyGroup>
 		<GAME_NAME>Quasimorph</GAME_NAME>
-		<SteamId>3287329716</SteamId>
 	</PropertyGroup>
 	<PropertyGroup>
 		<GAME_PATH Condition="!Exists('$(GAME_PATH)')">$([MSBuild]::GetRegistryValueFromView('HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\Steam App $(GAME_STEAM_ID)', 'InstallLocation', null, RegistryView.Registry64, RegistryView.Registry32))</GAME_PATH>
@@ -16,9 +15,15 @@
 		<GAME_PATH Condition="!Exists('$(GAME_PATH)') AND '$(_SteamLibraryPath)' != ''">$(_SteamLibraryPath)\steamapps\common\$(GAME_NAME)</GAME_PATH>
 		<GAME_PATH Condition="!Exists('$(GAME_PATH)')">C:\Program Files\Steam\steamapps\common\$(GAME_NAME)</GAME_PATH>
 		<GAME_PATH Condition="!Exists('$(GAME_PATH)')">C:\Program Files (x86)\Steam\steamapps\common\$(GAME_NAME)</GAME_PATH>
+
 	</PropertyGroup>
 	<PropertyGroup>
+		<SteamIdFilePath>$(MSBuildProjectDirectory)/../../bootstrap/SteamId.txt</SteamIdFilePath>
+		<SteamId Condition="Exists('$(SteamIdFilePath)')">$([System.IO.File]::ReadAllText('$(SteamIdFilePath)'))</SteamId>
 		<WorkshopPath>D:\Games\Steam\steamapps\workshop\content\2059170\$(SteamId)\</WorkshopPath>
+		<ManagedPath>$(GAME_PATH)\$(GAME_NAME)_Data\Managed\</ManagedPath>
+		<Assembly-CSharpPath Condition="Exists('./lib-stripped\Assembly-CSharp-publicized.dll')">./lib-stripped/Assembly-CSharp-publicized.dll</Assembly-CSharpPath>
+		<Assembly-CSharpPath Condition="!Exists('.\lib-stripped\Assembly-CSharp-publicized.dll')">$(ManagedPath)Assembly-CSharp.dll</Assembly-CSharpPath>
 		<MCM_PATH>$(GAME_PATH)\..\..\workshop\content\2059170\3469678797\MCM.dll</MCM_PATH>
 	</PropertyGroup>
 	<ItemGroup>
@@ -28,7 +33,7 @@
 			<Private>False</Private>
 		</Reference>
 		<Reference Include="Assembly-CSharp" publicize="true">
-			<HintPath>$(GAME_PATH)\Quasimorph_Data\Managed\Assembly-CSharp.dll</HintPath>
+			<HintPath>$(Assembly-CSharpPath)</HintPath>
 			<Private>False</Private>
 		</Reference>
 		<Reference Include="UnityEngine, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
@@ -48,31 +53,41 @@
 		</Reference>
 	</ItemGroup>
 	<ItemGroup>
-    <PackageReference Include="BepInEx.AssemblyPublicizer.MSBuild">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-	<PackageReference Include="Lib.Harmony" />
-    <PackageReference Include="Microsoft.CSharp" />
-    <PackageReference Include="Newtonsoft.Json" />
+		<PackageReference Include="BepInEx.AssemblyPublicizer.MSBuild">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+			<ExcludeAssets>runtime;</ExcludeAssets>
+		</PackageReference>
+		<PackageReference Include="Lib.Harmony" />
+		<PackageReference Include="Microsoft.CSharp">
+			<ExcludeAssets>runtime;</ExcludeAssets>
+		</PackageReference>
+		<PackageReference Include="Newtonsoft.Json">
+			<ExcludeAssets>runtime;</ExcludeAssets>
+		</PackageReference>
 	</ItemGroup>
-	<Target Name="PostBuild" AfterTargets="PostBuildEvent">
-		<Exec Command="@echo off&#xD;&#xA;set deployDir=&quot;$(WorkshopPath)&quot;&#xD;&#xA;&#xD;&#xA;xcopy /f /y &quot;../modmanifest.json&quot; &quot;$(TargetDir)&quot;&#xD;&#xA;&#xD;&#xA;if '$(SteamId)'=='' (echo SteamId in project not set.  Aborting Workshop Deployment &amp;&amp; exit)&#xD;&#xA;echo deploying to %25deployDir%25&#xD;&#xA;&#xD;&#xA;mkdir &quot;$(WorkshopPath)&quot;&#xD;&#xA;&#xD;&#xA;xcopy /f /y &quot;$(ProjectDir)../media/thumbnail.png&quot; %25deployDir%25&#xD;&#xA;xcopy /f /y &quot;$(ProjectDir)../modmanifest.json&quot; %25deployDir%25&#xD;&#xA;&#xD;&#xA;&#xD;&#xA;xcopy /f /y   &quot;$(TargetDir)$(TargetName).*&quot; %25deployDir%25&#xD;&#xA;&#xD;&#xA;if '$(Configuration)'=='Release' del &quot;$(WorkshopPath)$(TargetName).pdb&quot;" />
+	<ItemGroup>
+	  <ProjectReference Include="..\..\bootstrap\src\ImprovedSort_Bootstrap.csproj" />
+	</ItemGroup>
+	<Target Name="SteamIdCheck" Condition="'$(SteamId)'==''" AfterTargets="PostBuildEvent">
+		<Message Importance="high" Text="Steam Id is not set in the bootstrap's SteamId.txt.  Aborting deployment." />
 	</Target>
-	<Target Condition="'$(SteamId)'!=''" Name="PostBuildPackage" AfterTargets="PostBuildEvent">
+	<Target Name="SteamWorkshopDeploy" Condition="'$(SteamId)'!=''" AfterTargets="PostBuildEvent">
 		<PropertyGroup>
-			<AssemblyVersion>$(VersionPrefix)</AssemblyVersion>
-			<PackageFolder>$(ProjectDir)../package/</PackageFolder>
+			<VersionWorkshopPath Condition="$(ProjectDir.Contains('beta'))">$(WorkshopPath)beta</VersionWorkshopPath>
+			<VersionWorkshopPath Condition="$(VersionWorkshopPath)==''">$(WorkshopPath)stable</VersionWorkshopPath>
 		</PropertyGroup>
 		<ItemGroup>
-			<WorkshopSourceFile Include="$(WorkshopPath)*.*" />
-			<PackageRemoveFiles Include="$(PackageFolder)$(TargetName)/*.pdb" />
+			<FilesToDelete Include="$(VersionWorkshopPath)/*" />
+			<Delete Files="@(FilesToDelete)" />
+			<BuildSource Include="$(TargetDir)/*.*" Exclude="$(TargetDir)/*bootstrap.*" />
+			 <!--Exclude workaround for build ignorning private assets for Project References-->
 		</ItemGroup>
-		<Message Text="---------- Creating Package: $(PackageFolder)$(TargetName)/*.pdb" Importance="high" />
-		<RemoveDir Directories="$(PackageFolder)" />
-		<Copy SourceFiles="@(WorkshopSourceFile)" DestinationFolder="$(PackageFolder)$(TargetName)">
-		</Copy>
-		<Delete Files="@(PackageRemoveFiles)" />
-		<ZipDirectory SourceDirectory="$(PackageFolder)" DestinationFile="$(PackageFolder)../$(TargetName).zip" Overwrite="true" />
+
+		<Message Importance="high" Text="ProjectDir folder -&gt; $(ProjectDir)" />
+		<Message Importance="high" Text="Workshop folder: $(VersionWorkshopPath)" />
+		<MakeDir Directories="$(VersionWorkshopPath)" ContinueOnError="true" />
+		<Copy SourceFiles="@(BuildSource)" DestinationFolder="$(VersionWorkshopPath)" />
+		<Delete Files="$(VersionWorkshopPath)/*bootstrap.dll" />
 	</Target>
 </Project>

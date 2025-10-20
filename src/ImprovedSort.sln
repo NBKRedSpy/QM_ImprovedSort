@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.10.35013.160
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QM_ImprovedSort", "QM_ImprovedSort.csproj", "{4A4DC2D7-50ED-4E5D-AA6F-28B14F5818E6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImprovedSort", "ImprovedSort.csproj", "{4A4DC2D7-50ED-4E5D-AA6F-28B14F5818E6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImprovedSort_Bootstrap", "..\..\bootstrap\src\ImprovedSort_Bootstrap.csproj", "{D4556F64-9A56-B443-B157-7297ED45E852}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{4A4DC2D7-50ED-4E5D-AA6F-28B14F5818E6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4A4DC2D7-50ED-4E5D-AA6F-28B14F5818E6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4A4DC2D7-50ED-4E5D-AA6F-28B14F5818E6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D4556F64-9A56-B443-B157-7297ED45E852}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D4556F64-9A56-B443-B157-7297ED45E852}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D4556F64-9A56-B443-B157-7297ED45E852}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D4556F64-9A56-B443-B157-7297ED45E852}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
