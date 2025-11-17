@@ -161,6 +161,11 @@ Source code is available on GitHub https://github.com/NBKRedSpy/QM_ImprovedSort
 
 [h1]Change Log[/h1]
 
+[h2]1.4.0[/h2]
+[list]
+[*]Multi Version Support for beta release.
+[/list]
+
 [h2]1.3.0[/h2]
 [list]
 [*]Multi Version Support for current release.
